@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creative Vision — One-Stop Business Technology Partner</title>
+<meta name="description" content="Creative Vision is a Guwahati-based Business Automation & Technology Solutions company and certified Tally Partner — TallyPrime, POS & billing, hardware, consumables and business automation, from one partner.">
+<link rel="icon" type="image/png" href="images/tally-official-logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    /* ---- Color tokens ---- */
+    --navy-950:#060B14;
+    --navy-900:#0A1628;
+    --navy-850:#0D1D33;
+    --navy-800:#132A47;
+    --navy-700:#1C3A5E;
+    --slate-400:#8CA0B8;
+    --slate-500:#6B8099;
+    --slate-600:#4E617A;
+    --slate-700:#374A61;
+    --white:#FFFFFF;
+    --off-white:#F5F8FB;
+    --paper:#EFF3F8;
+    --green-600:#0C8C5B;
+    --green-500:#12A66E;
+    --green-400:#26C384;
+    --green-300:#6FE0AC;
+    --green-050:#E7FAF1;
+
+    /* ---- Type ---- */
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+
+    --container:1180px;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+  body{
+    margin:0;
+    font-family:var(--font-body);
+    background:var(--off-white);
+    color:var(--navy-900);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  ul{margin:0;padding:0;list-style:none;}
+  h1,h2,h3,h4{font-family:var(--font-display); margin:0; line-height:1.12; letter-spacing:-0.01em;}
+  p{margin:0;}
+  section{padding:96px 0;}
+  .container{width:100%; max-width:var(--container); margin:0 auto; padding:0 24px;}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-weight:500;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px;height:7px;border-radius:50%;
+    background:var(--green-400);
+    box-shadow:0 0 0 3px rgba(38,195,132,0.18);
+    flex:none;
+  }
+
+  :focus-visible{outline:2px solid var(--green-400); outline-offset:3px; border-radius:4px;}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:15px;
+    padding:14px 26px;
+    border-radius:8px;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn svg{flex:none;}
+
+  .btn-primary{background:var(--green-500); color:var(--navy-950);}
+  .btn-primary:hover{background:var(--green-400); box-shadow:0 10px 24px -8px rgba(18,166,110,0.55);}
+
+  .btn-ghost-dark{background:transparent; border-color:rgba(255,255,255,0.28); color:var(--white);}
+  .btn-ghost-dark:hover{border-color:var(--green-400); background:rgba(38,195,132,0.08);}
+
+  .btn-ghost-light{background:transparent; border-color:var(--navy-700); color:var(--navy-900);}
+  .btn-ghost-light:hover{border-color:var(--green-500); color:var(--green-600);}
+
+  .btn-whatsapp{background:var(--green-500); color:var(--navy-950);}
+  .btn-whatsapp:hover{background:var(--green-400); box-shadow:0 10px 24px -8px rgba(18,166,110,0.55);}
+
+  /* ---------- Nav ---------- */
+  .nav{
+    position:sticky; top:0; z-index:100;
+    background:rgba(6,11,20,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px;
+    max-width:var(--container); margin:0 auto;
+  }
+  .brand{display:flex; align-items:center; gap:10px; color:var(--white);}
+  .brand-word{
+    font-family:var(--font-display); font-weight:700; font-size:21px; letter-spacing:0.01em;
+    color:var(--white);
+  }
+  .brand-word span{color:var(--green-400);}
+  .brand-badge{
+    background:var(--white);
+    border-radius:8px;
+    padding:6px 10px;
+    display:flex; align-items:center;
+    flex:none;
+  }
+  .brand-badge img{height:22px; width:auto; display:block;}
+  .brand-mark{
+    width:36px;height:36px;border-radius:9px;
+    background:linear-gradient(135deg, var(--green-500), var(--green-600));
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--navy-950);
+    flex:none;
+  }
+  .brand-name{font-family:var(--font-display); font-weight:600; font-size:18px; letter-spacing:-0.01em;}
+  .brand-name span{color:var(--green-400);}
+
+  .nav-links{display:flex; align-items:center; gap:36px;}
+  .nav-links a{
+    color:var(--slate-400); font-size:14.5px; font-weight:500;
+    transition:color .15s ease;
+  }
+  .nav-links a:hover{color:var(--white);}
+
+  .nav-right{display:flex; align-items:center; gap:14px;}
+  .nav-toggle{
+    display:none; background:none; border:1px solid rgba(255,255,255,0.2); border-radius:8px;
+    width:42px; height:42px; align-items:center; justify-content:center; color:var(--white); cursor:pointer;
+  }
+
+  @media (max-width:860px){
+    .nav-links{
+      position:fixed; inset:64px 0 0 0; z-index:99;
+      background:var(--navy-950);
+      flex-direction:column; align-items:flex-start; gap:2px;
+      padding:20px 24px 32px;
+      transform:translateY(-8px);
+      opacity:0; pointer-events:none;
+      transition:opacity .2s ease, transform .2s ease;
+      overflow-y:auto;
+    }
+    .nav-links.is-open{opacity:1; pointer-events:auto; transform:translateY(0);}
+    .nav-links a{width:100%; padding:14px 4px; border-bottom:1px solid rgba(255,255,255,0.08); font-size:16px;}
+    .nav-toggle{display:inline-flex;}
+    .nav-right .btn-primary{padding:10px 16px; font-size:13.5px;}
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    background:
+      radial-gradient(120% 140% at 15% 0%, rgba(13,29,51,0.94) 0%, rgba(10,22,40,0.96) 55%, rgba(3,6,9,0.97) 100%),
+      url('images/office-2.jpg');
+    background-size:cover;
+    background-position:center 30%;
+    color:var(--white);
+    overflow:hidden;
+    padding:64px 0 72px;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, transparent 78%, var(--navy-950) 92%, var(--off-white) 100%);
+    pointer-events:none;
+  }
+  .hero-grid{
+    position:relative; z-index:1;
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:48px; align-items:center;
+  }
+
+  /* Tally certified badge — logo stacked above label */
+  .tally-badge{
+    display:inline-flex; flex-direction:column; align-items:center; gap:8px;
+    background:var(--white);
+    border-radius:14px;
+    padding:14px 22px 12px;
+    box-shadow:0 14px 30px -12px rgba(0,0,0,0.45);
+    margin-bottom:28px;
+  }
+  .tally-badge img{height:22px; width:auto; display:block;}
+  .tally-badge span{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--navy-800); font-weight:500; white-space:nowrap;
+  }
+
+  .hero-brand-title{
+    font-size:clamp(2.6rem, 6vw, 4.6rem);
+    font-weight:700;
+    color:var(--white);
+    letter-spacing:0.01em;
+    line-height:1.02;
+  }
+  .hero-brand-sub{
+    margin-top:14px;
+    font-family:var(--font-display);
+    font-size:clamp(1.15rem, 2.1vw, 1.55rem);
+    font-weight:500;
+    color:var(--green-300);
+  }
+  .hero-category-line{
+    margin-top:16px;
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    letter-spacing:0.04em;
+    color:rgba(255,255,255,0.82);
+    max-width:52ch;
+  }
+  .hero-copy .eyebrow{color:var(--green-300); margin-bottom:22px;}
+  .hero h1{
+    font-size:clamp(1.6rem, 2.6vw, 2.1rem);
+    color:var(--white);
+    max-width:20ch;
+    font-weight:600;
+    margin-top:26px;
+  }
+  .hero h1 em{
+    font-style:normal; color:var(--green-400);
+  }
+  .hero-sub{
+    margin-top:18px; max-width:46ch;
+    color:rgba(255,255,255,0.72); font-size:16.5px; line-height:1.7;
+  }
+  .hero-ctas{display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;}
+  .hero-badges{
+    margin-top:36px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    font-family:var(--font-mono); font-size:12.5px; letter-spacing:0.04em;
+  }
+  .hero-badges .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:9px 16px; border:1px solid rgba(255,255,255,0.28); border-radius:100px;
+    background:rgba(8,16,28,0.55);
+    color:rgba(255,255,255,0.94);
+    font-weight:500;
+  }
+  .hero-badges .badge svg{color:var(--green-400); flex:none;}
+
+  /* ---- signature hub diagram ---- */
+  .hub-wrap{position:relative; display:flex; align-items:center; justify-content:center;}
+  .hub-svg{width:100%; max-width:480px; height:auto;}
+  .hub-line{stroke:rgba(111,224,172,0.35); stroke-width:1.5; fill:none; stroke-dasharray:6 3;}
+  .hub-node-bg{fill:var(--navy-800); stroke:rgba(255,255,255,0.12); stroke-width:1;}
+  .hub-node-icon{color:var(--green-400);}
+  .hub-node-label{
+    font-family:var(--font-mono); font-size:10.5px; fill:var(--slate-400); text-anchor:middle; letter-spacing:0.03em;
+  }
+  .hub-center-circle{fill:url(#hubGrad); stroke:var(--green-400); stroke-width:1.5;}
+  .hub-center-text{font-family:var(--font-display); font-weight:700; font-size:22px; fill:var(--white); text-anchor:middle;}
+  .hub-pulse{fill:none; stroke:var(--green-400); stroke-width:1.5; opacity:0;}
+  @media (prefers-reduced-motion: no-preference){
+    .hub-pulse{animation:pulseRing 3.2s ease-out infinite;}
+    .hub-node{animation:fadeInNode .6s ease both;}
+  }
+  @keyframes pulseRing{
+    0%{opacity:.65; transform:scale(0.7); transform-origin:300px 300px;}
+    100%{opacity:0; transform:scale(1.55); transform-origin:300px 300px;}
+  }
+  @keyframes fadeInNode{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  @media (max-width:960px){
+    .hero-grid{grid-template-columns:1fr; text-align:left;}
+    .hub-wrap{margin-top:8px;}
+    .hub-svg{max-width:400px;}
+  }
+
+  /* ---------- Section headers ---------- */
+  .section-head{max-width:640px; margin-bottom:52px;}
+  .section-head .eyebrow{color:var(--green-600); margin-bottom:16px;}
+  .section-head h2{font-size:clamp(1.9rem, 3.2vw, 2.6rem); color:var(--navy-950);}
+  .section-head p{margin-top:16px; color:var(--slate-600); font-size:16.5px; max-width:52ch;}
+  .section-head.on-dark h2{color:var(--white);}
+  .section-head.on-dark p{color:var(--slate-400);}
+  .section-head.on-dark .eyebrow{color:var(--green-400);}
+  .section-head.center{margin-left:auto; margin-right:auto; text-align:center;}
+
+  /* ---------- About ---------- */
+  .about{background:var(--white);}
+  .about-grid{display:grid; grid-template-columns:0.95fr 1.05fr; gap:60px; align-items:center;}
+  @media (max-width:900px){ .about-grid{grid-template-columns:1fr; gap:40px;} }
+  .about-copy p{color:var(--slate-600); font-size:16px; line-height:1.75; margin-bottom:18px;}
+  .founder-block{
+    margin-top:56px; padding-top:40px; border-top:1px solid var(--paper);
+    max-width:640px;
+  }
+  .founder-quote{
+    font-family:var(--font-display); font-style:italic; font-weight:500;
+    font-size:19px; line-height:1.55; color:var(--navy-900);
+    padding-left:22px; border-left:3px solid var(--green-400);
+  }
+  .founder-name{margin-top:18px; padding-left:22px; font-weight:700; font-size:15px; color:var(--navy-950);}
+  .founder-title{padding-left:22px; font-size:13px; color:var(--slate-500); margin-top:2px;}
+  .founder-title + .founder-title{margin-top:4px;}
+  .about-facts{
+    margin-top:28px; display:grid; grid-template-columns:1fr 1fr; gap:16px;
+    padding-top:26px; border-top:1px solid var(--paper);
+  }
+  .about-fact-label{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--slate-500); margin-bottom:6px;
+  }
+  .about-fact-value{font-size:14.5px; color:var(--navy-900); font-weight:600; line-height:1.5;}
+  .about-photos{position:relative; display:grid; place-items:center;}
+  .about-photo-main{
+    border-radius:18px; overflow:hidden; box-shadow:0 30px 60px -24px rgba(10,22,40,0.35);
+    border:6px solid var(--white);
+  }
+  .about-photo-main img{width:100%; height:340px; object-fit:cover; display:block;}
+  .about-photo-sub{
+    position:absolute; right:-24px; bottom:-34px; width:56%;
+    border-radius:14px; overflow:hidden; box-shadow:0 24px 48px -20px rgba(10,22,40,0.4);
+    border:6px solid var(--white);
+  }
+  .about-photo-sub img{width:100%; height:180px; object-fit:cover; display:block;}
+  @media (max-width:520px){
+    .about-photo-sub{right:-8px; bottom:-28px; width:60%;}
+    .about-photo-main img{height:280px;}
+    .about-photo-sub img{height:140px;}
+  }
+
+  /* ---------- Solutions ---------- */
+  .solutions{background:linear-gradient(180deg, #EEF6F2 0%, #F5F8FB 100%);}
+  .sol-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:16px;
+  }
+  @media (max-width:920px){ .sol-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:640px){ .sol-grid{grid-template-columns:1fr;} }
+
+  .sol-card{
+    background:var(--white);
+    border:1px solid rgba(19,42,71,0.08);
+    border-radius:14px;
+    padding:20px 18px 18px;
+    display:flex; flex-direction:column;
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .sol-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 16px 32px -18px rgba(10,22,40,0.22);
+    border-color:rgba(18,166,110,0.35);
+  }
+  .sol-icon{
+    width:38px; height:38px; border-radius:10px;
+    background:var(--green-050);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--green-600); margin-bottom:14px; flex:none;
+  }
+  .sol-icon svg{width:19px; height:19px;}
+  .sol-card h3{font-size:16px; color:var(--navy-950); margin-bottom:7px;}
+  .sol-card p{color:var(--slate-600); font-size:13px; line-height:1.55; margin-bottom:13px;}
+  .sol-chips{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;}
+  .sol-chip{
+    font-family:var(--font-mono); font-size:10px; letter-spacing:0.02em;
+    padding:4px 9px; border-radius:100px;
+    background:var(--paper); color:var(--slate-700);
+  }
+  .sol-chip.more{color:var(--green-600); background:var(--green-050); font-weight:500;}
+  .sol-link{
+    margin-top:auto;
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:13px; font-weight:600; color:var(--green-600);
+  }
+  .sol-link svg{transition:transform .18s ease;}
+  .sol-card:hover .sol-link svg{transform:translateX(3px);}
+
+  /* ---------- Why ---------- */
+  .why{background:var(--navy-950); color:var(--white);}
+  .why-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:16px; overflow:hidden;
+  }
+  @media (max-width:920px){ .why-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:600px){ .why-grid{grid-template-columns:1fr;} }
+  .why-item{
+    background:var(--navy-900);
+    padding:30px 26px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .why-check{
+    width:34px; height:34px; border-radius:9px;
+    background:rgba(38,195,132,0.12); color:var(--green-400);
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .why-item h4{font-size:16px; color:var(--white); font-weight:600; font-family:var(--font-body);}
+  .why-item p{font-size:13.5px; color:var(--slate-500); line-height:1.6;}
+
+  /* ---------- CTA band ---------- */
+  .cta-band{
+    background:linear-gradient(120deg, var(--navy-900) 0%, var(--navy-850) 60%, var(--green-600) 190%);
+    color:var(--white);
+    padding:90px 0;
+  }
+  .cta-inner{max-width:640px; margin:0 auto; text-align:center;}
+  .cta-inner .eyebrow{color:var(--green-400); justify-content:center; margin-bottom:18px;}
+  .cta-inner h2{font-size:clamp(1.8rem,3.4vw,2.5rem); color:var(--white);}
+  .cta-inner p{margin-top:16px; color:var(--slate-400); font-size:16.5px;}
+  .cta-form-row{
+    margin-top:32px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
+  }
+
+  /* ---------- Footer ---------- */
+  .footer{background:var(--navy-950); color:var(--slate-500); padding:64px 0 28px; border-top:1px solid rgba(255,255,255,0.06);}
+  .footer-grid{
+    display:grid; grid-template-columns:1.4fr 1fr 1fr 1.2fr; gap:36px; padding-bottom:44px;
+  }
+  @media (max-width:820px){ .footer-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:520px){ .footer-grid{grid-template-columns:1fr;} }
+  .footer-brand p{margin-top:14px; font-size:14px; line-height:1.7; max-width:32ch; color:var(--slate-500);}
+  .footer h5{
+    font-family:var(--font-mono); font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--slate-400); margin-bottom:16px; font-weight:500;
+  }
+  .footer ul li{margin-bottom:11px;}
+  .footer ul a{font-size:14px; color:var(--slate-500); transition:color .15s ease;}
+  .footer ul a:hover{color:var(--green-400);}
+  .footer-bottom{
+    border-top:1px solid rgba(255,255,255,0.08); padding-top:24px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+    font-size:13px; color:var(--slate-600);
+  }
+
+  /* ---------- Floating WhatsApp ---------- */
+  .float-wa{
+    position:fixed; right:20px; bottom:20px; z-index:200;
+    width:58px; height:58px; border-radius:50%;
+    background:var(--green-500); color:var(--navy-950);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 12px 28px -8px rgba(18,166,110,0.6);
+    transition:transform .18s ease;
+  }
+  .float-wa:hover{transform:scale(1.08);}
+  .float-wa::before{
+    content:""; position:absolute; inset:0; border-radius:50%;
+    border:2px solid var(--green-400); opacity:.6;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .float-wa::before{animation:pulseRing 2.4s ease-out infinite;}
+  }
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#home" class="brand">
+      <span class="brand-word">CREATIVE <span>VISION</span></span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#solutions">Solutions</a>
+      <a href="shop.html">Buy Now</a>
+      <a href="#why">Why Us</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="nav-right">
+      <a class="btn btn-primary" id="navQuoteBtn" href="quote.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+        Get a Quote
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="home">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="tally-badge">
+        <img src="images/tally-official-logo.png" alt="Tally">
+        <span>Certified Partner</span>
+      </div>
+
+      <h1 class="hero-brand-title">CREATIVE VISION</h1>
+      <div class="hero-brand-sub">One-Stop Business Technology Partner</div>
+      <div class="hero-category-line">Software &nbsp;•&nbsp; Automation &nbsp;•&nbsp; POS &nbsp;•&nbsp; Hardware &nbsp;•&nbsp; Consumables &nbsp;•&nbsp; Support</div>
+
+      <p class="hero-sub" style="margin-top:24px;">
+        From accounting software and billing systems to POS hardware, consumables and automation —
+        Creative Vision helps businesses choose, implement and support the technology they need to operate efficiently.
+      </p>
+      <div class="hero-ctas">
+        <a href="#solutions" class="btn btn-primary">
+          Explore Solutions
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+        <a href="#" class="btn btn-ghost-dark js-wa" data-msg="Hi Creative Vision, I'd like to talk to an expert about business technology solutions.">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2.003c-5.53 0-10.02 4.49-10.02 10.02 0 1.77.46 3.5 1.34 5.02L2 22l5.1-1.34a10 10 0 0 0 4.94 1.31h.01c5.53 0 10.02-4.49 10.02-10.02 0-2.68-1.04-5.2-2.94-7.09a9.96 9.96 0 0 0-7.09-2.9zm5.87 14.34c-.25.7-1.45 1.34-2 1.43-.51.08-1.15.11-1.86-.12-.43-.14-.98-.32-1.68-.63-2.96-1.28-4.89-4.26-5.04-4.46-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.78-.37h.56c.18 0 .42-.07.66.5.25.6.85 2.06.92 2.21.07.15.12.33.02.53-.1.2-.15.32-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.6.17.3.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.36 1.45.3.15.47.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.66-.15.27.1 1.7.8 1.99.95.3.15.5.22.57.35.07.13.07.75-.18 1.46z"></path></svg>
+          Talk to an Expert
+        </a>
+      </div>
+      <div class="hero-badges">
+        <span class="badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Software + Hardware + Supplies</span>
+        <span class="badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Guwahati · North East India</span>
+        <span class="badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Setup to Support</span>
+      </div>
+    </div>
+
+    <div class="hub-wrap" aria-hidden="true">
+      <svg class="hub-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="hubGrad" cx="35%" cy="30%" r="80%">
+            <stop offset="0%" stop-color="#1C3A5E"/>
+            <stop offset="100%" stop-color="#0A1628"/>
+          </radialGradient>
+        </defs>
+
+        <!-- connecting lines -->
+        <line class="hub-line" x1="300" y1="300" x2="300" y2="90"/>
+        <line class="hub-line" x1="300" y1="300" x2="481.9" y2="195"/>
+        <line class="hub-line" x1="300" y1="300" x2="481.9" y2="405"/>
+        <line class="hub-line" x1="300" y1="300" x2="300" y2="510"/>
+        <line class="hub-line" x1="300" y1="300" x2="118.1" y2="405"/>
+        <line class="hub-line" x1="300" y1="300" x2="118.1" y2="195"/>
+
+        <!-- pulse rings -->
+        <circle class="hub-pulse" cx="300" cy="300" r="60"/>
+
+        <!-- center -->
+        <circle class="hub-center-circle" cx="300" cy="300" r="62"/>
+        <text class="hub-center-text" x="300" y="308">CV</text>
+
+        <!-- node: Software -->
+        <g class="hub-node" style="animation-delay:.05s">
+          <circle class="hub-node-bg" cx="300" cy="90" r="34"/>
+          <g class="hub-node-icon" transform="translate(285,75)">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          </g>
+          <text class="hub-node-label" x="300" y="146">SOFTWARE</text>
+        </g>
+
+        <!-- node: POS -->
+        <g class="hub-node" style="animation-delay:.1s">
+          <circle class="hub-node-bg" cx="481.9" cy="195" r="34"/>
+          <g class="hub-node-icon" transform="translate(466.9,180)">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"></rect><line x1="6" y1="9" x2="18" y2="9"></line><line x1="6" y1="13" x2="12" y2="13"></line></svg>
+          </g>
+          <text class="hub-node-label" x="481.9" y="251">POS</text>
+        </g>
+
+        <!-- node: Hardware -->
+        <g class="hub-node" style="animation-delay:.15s">
+          <circle class="hub-node-bg" cx="481.9" cy="405" r="34"/>
+          <g class="hub-node-icon" transform="translate(466.9,390)">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          </g>
+          <text class="hub-node-label" x="481.9" y="461">HARDWARE</text>
+        </g>
+
+        <!-- node: Consumables -->
+        <g class="hub-node" style="animation-delay:.2s">
+          <circle class="hub-node-bg" cx="300" cy="510" r="34"/>
+          <g class="hub-node-icon" transform="translate(285,495)">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+          </g>
+          <text class="hub-node-label" x="300" y="566">SUPPLIES</text>
+        </g>
+
+        <!-- node: Automation -->
+        <g class="hub-node" style="animation-delay:.25s">
+          <circle class="hub-node-bg" cx="118.1" cy="405" r="34"/>
+          <g class="hub-node-icon" transform="translate(103.1,390)">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </g>
+          <text class="hub-node-label" x="118.1" y="461">AUTOMATION</text>
+        </g>
+
+        <!-- node: Digital -->
+        <g class="hub-node" style="animation-delay:.3s">
+          <circle class="hub-node-bg" cx="118.1" cy="195" r="34"/>
+          <g class="hub-node-icon" transform="translate(103.1,180)">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          </g>
+          <text class="hub-node-label" x="118.1" y="251">DIGITAL</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="about" id="about">
+  <div class="container about-grid">
+    <div class="about-copy reveal">
+      <span class="eyebrow" style="color:var(--green-600); margin-bottom:16px; display:inline-flex;">About Us</span>
+      <h2 style="font-size:clamp(1.9rem, 3.2vw, 2.6rem); color:var(--navy-950); margin-bottom:20px;">A Guwahati-based technology partner, built around your business.</h2>
+      <p>Creative Vision is a Guwahati-based Business Automation &amp; Technology Solutions company. As a certified Tally Partner, we provide TallyPrime, TSS renewals, implementation, customisation, TDL, training and support.</p>
+      <p>We also offer POS &amp; billing solutions, thermal printers, barcode scanners, label printers, POS systems, business hardware, consumables, AMC and digital business solutions.</p>
+      <p><strong style="color:var(--navy-900);">Our approach is simple:</strong> understand the business, identify the problem, and provide the right solution.</p>
+
+      <div class="about-facts">
+        <div>
+          <div class="about-fact-label">Head Office</div>
+          <div class="about-fact-value">House No. 1, 1st Floor, R.G. Baruah Road, Nilgiri Path, behind Blue Dart Express, Guwahati, Assam 781024</div>
+        </div>
+        <div>
+          <div class="about-fact-label">Call / WhatsApp</div>
+          <div class="about-fact-value">+91 88120 11049</div>
+        </div>
+      </div>
+      <a href="https://www.google.com/search?q=creative+vision&rlz=1C1VDKB_enIN1079IN1079&oq=crea&gs_lcrp=EgZjaHJvbWUqCAgAEEUYJxg7MggIABBFGCcYOzIICAEQRRgnGDsyBggCEEUYOTIKCAMQABixAxiABDINCAQQABiDARixAxiABDIGCAUQRRg8MgYIBhBFGDwyBggHEEUYPNIBCDE4MTlqMGo3qAIAsAIA&sourceid=chrome&source=chrome.ob&ie=UTF-8" target="_blank" rel="noopener" class="sol-link" style="margin-top:24px;">
+        View us on Google <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    </div>
+
+    <div class="about-photos reveal">
+      <div class="about-photo-main">
+        <img src="images/office-2.jpg" alt="Creative Vision office and product showroom in Guwahati">
+      </div>
+      <div class="about-photo-sub">
+        <img src="images/office-1.jpg" alt="Creative Vision meeting room in Guwahati">
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="founder-block reveal">
+      <p class="founder-quote">"We started Creative Vision with one goal — to bring the right technology, tools and support together under one roof, helping businesses work smarter and grow with confidence."</p>
+      <div class="founder-name">Ishan Rabha</div>
+      <div class="founder-title">Founder &amp; Proprietor</div>
+      <div class="founder-title">Creative Vision — One-Stop Business Technology Partner | Tally Certified Partner</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOLUTIONS ============ -->
+<section class="solutions" id="solutions">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Solutions</span>
+      <h2>Everything your business needs to run smarter.</h2>
+      <p>Six connected practice areas, one point of contact. Explore what fits your business, and we'll help you get specific on WhatsApp.</p>
+    </div>
+
+    <div class="sol-grid">
+
+      <!-- Tally & Business Software -->
+      <div class="sol-card reveal">
+        <div class="sol-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line><polyline points="9 11 10.5 12.5 13 10"></polyline></svg>
+        </div>
+        <h3>Tally &amp; Business Software</h3>
+        <p>Licensing, implementation and support for the accounting backbone your business runs on.</p>
+        <div class="sol-chips">
+          <span class="sol-chip">TallyPrime</span>
+          <span class="sol-chip">TSS Renewal</span>
+          <span class="sol-chip">Implementation</span>
+          <span class="sol-chip more">+3 more</span>
+        </div>
+        <a href="shop.html" class="sol-link">
+          View range <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- POS & Billing -->
+      <div class="sol-card reveal">
+        <div class="sol-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"></rect><line x1="6" y1="9" x2="18" y2="9"></line><line x1="6" y1="13" x2="12" y2="13"></line></svg>
+        </div>
+        <h3>POS &amp; Billing Solutions</h3>
+        <p>Point-of-sale systems tuned to how retail, restaurant and pharmacy counters actually work.</p>
+        <div class="sol-chips">
+          <span class="sol-chip">Retail</span>
+          <span class="sol-chip">Restaurant</span>
+          <span class="sol-chip">Pharmacy</span>
+          <span class="sol-chip more">+2 more</span>
+        </div>
+        <a href="shop.html" class="sol-link">
+          View range <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- Hardware & Technology -->
+      <div class="sol-card reveal">
+        <div class="sol-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        </div>
+        <h3>Hardware &amp; Technology</h3>
+        <p>Printers, scanners, drawers and the computers that keep a counter running — backed by AMC.</p>
+        <div class="sol-chips">
+          <span class="sol-chip">Thermal Printers</span>
+          <span class="sol-chip">Barcode Scanners</span>
+          <span class="sol-chip">UPS</span>
+          <span class="sol-chip more">+3 more</span>
+        </div>
+        <a href="shop.html" class="sol-link">
+          View range <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- Business Consumables -->
+      <div class="sol-card reveal">
+        <div class="sol-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+        </div>
+        <h3>Business Consumables</h3>
+        <p>The rolls, labels and packaging that run out quietly and stop a counter when they do.</p>
+        <div class="sol-chips">
+          <span class="sol-chip">Thermal Rolls</span>
+          <span class="sol-chip">Barcode Labels</span>
+          <span class="sol-chip">Courier Bags</span>
+          <span class="sol-chip more">+2 more</span>
+        </div>
+        <a href="shop.html" class="sol-link">
+          View range <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- Business Automation -->
+      <div class="sol-card reveal">
+        <div class="sol-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </div>
+        <h3>Business Automation</h3>
+        <p>Custom TDL, Excel and reporting workflows that remove the manual steps between your data and a decision.</p>
+        <div class="sol-chips">
+          <span class="sol-chip">TDL Development</span>
+          <span class="sol-chip">Excel Automation</span>
+          <span class="sol-chip">Reports &amp; MIS</span>
+          <span class="sol-chip more">+2 more</span>
+        </div>
+        <a href="shop.html" class="sol-link">
+          View range <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+
+      <!-- Digital Business Services -->
+      <div class="sol-card reveal">
+        <div class="sol-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        </div>
+        <h3>Digital Business Services</h3>
+        <p>A website, WhatsApp Business and a Google presence — the digital front door most businesses skip.</p>
+        <div class="sol-chips">
+          <span class="sol-chip">Website</span>
+          <span class="sol-chip">WhatsApp Business</span>
+          <span class="sol-chip">Local SEO</span>
+          <span class="sol-chip more">+1 more</span>
+        </div>
+        <a href="shop.html" class="sol-link">
+          View range <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY ============ -->
+<section class="why" id="why">
+  <div class="container">
+    <div class="section-head on-dark reveal">
+      <span class="eyebrow">Why Creative Vision</span>
+      <h2>One partner, from setup to support.</h2>
+    </div>
+
+    <div class="why-grid reveal">
+      <div class="why-item">
+        <div class="why-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        <h4>Tally Certified Partner</h4>
+        <p>Authorised licensing, implementation and renewals, done right the first time.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        <h4>Software + Hardware + Supplies</h4>
+        <p>No stitching together three vendors for one working counter.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        <h4>Implementation &amp; Customisation</h4>
+        <p>Set up around how your business actually operates, not a generic default.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        <h4>Local Support in Guwahati</h4>
+        <p>Someone reachable nearby when a printer jams or a counter goes down.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        <h4>Business-Focused Solutions</h4>
+        <p>Recommendations built around your workflow, not whatever is easiest to sell.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        <h4>One Partner, Setup to Support</h4>
+        <p>The same team that installs it is the one you call when something needs fixing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA BAND ============ -->
+<section class="cta-band" id="contact">
+  <div class="container cta-inner reveal">
+    <span class="eyebrow">Get Started</span>
+    <h2>Have a business problem? Let's find the right solution.</h2>
+    <p>Tell us what you need. We'll help you choose the right software, hardware or service for your business.</p>
+    <div class="cta-form-row">
+      <a href="#" class="btn btn-whatsapp js-wa" data-msg="Hi Creative Vision, here's what I need help with:">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2.003c-5.53 0-10.02 4.49-10.02 10.02 0 1.77.46 3.5 1.34 5.02L2 22l5.1-1.34a10 10 0 0 0 4.94 1.31h.01c5.53 0 10.02-4.49 10.02-10.02 0-2.68-1.04-5.2-2.94-7.09a9.96 9.96 0 0 0-7.09-2.9zm5.87 14.34c-.25.7-1.45 1.34-2 1.43-.51.08-1.15.11-1.86-.12-.43-.14-.98-.32-1.68-.63-2.96-1.28-4.89-4.26-5.04-4.46-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.78-.37h.56c.18 0 .42-.07.66.5.25.6.85 2.06.92 2.21.07.15.12.33.02.53-.1.2-.15.32-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.6.17.3.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.36 1.45.3.15.47.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.66-.15.27.1 1.7.8 1.99.95.3.15.5.22.57.35.07.13.07.75-.18 1.46z"></path></svg>
+        WhatsApp Creative Vision
+      </a>
+      <a href="tel:+918812011049" class="btn btn-ghost-dark">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        Call Us
+      </a>
+      <a href="enquire.html" class="btn btn-ghost-dark">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        Submit an Enquiry
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand-word" style="font-size:22px; color:#fff;">CREATIVE <span style="color:var(--green-400);">VISION</span></div>
+        <p>One-stop business technology partner — software, automation, POS, hardware, consumables and support.</p>
+        <span class="brand-badge" style="display:inline-flex; margin-top:16px;"><img src="images/tally-official-logo.png" alt="Tally Certified Partner" style="height:18px;"></span>
+      </div>
+
+      <div>
+        <h5>Solutions</h5>
+        <ul>
+          <li><a href="#solutions">Tally &amp; Business Software</a></li>
+          <li><a href="#solutions">POS &amp; Billing</a></li>
+          <li><a href="#solutions">Hardware &amp; Technology</a></li>
+          <li><a href="#solutions">Business Consumables</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="shop.html">Buy Now</a></li>
+          <li><a href="#why">Why Us</a></li>
+          <li><a href="quote.html">Get a Quote</a></li>
+          <li><a href="enquire.html">Enquire</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Contact</h5>
+        <ul>
+          <li>House No. 1, 1st Floor, R.G. Baruah Road, Nilgiri Path, behind Blue Dart Express, Guwahati, Assam 781024</li>
+          <li><a href="tel:+918812011049">+91 88120 11049</a></li>
+          <li><a href="https://www.google.com/search?q=creative+vision&rlz=1C1VDKB_enIN1079IN1079&oq=crea&gs_lcrp=EgZjaHJvbWUqCAgAEEUYJxg7MggIABBFGCcYOzIICAEQRRgnGDsyBggCEEUYOTIKCAMQABixAxiABDINCAQQABiDARixAxiABDIGCAUQRRg8MgYIBhBFGDwyBggHEEUYPNIBCDE4MTlqMGo3qAIAsAIA&sourceid=chrome&source=chrome.ob&ie=UTF-8" target="_blank" rel="noopener">Google Business Profile</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Creative Vision. All rights reserved.</span>
+      <span>Tally Certified Partner · North East India</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating WhatsApp -->
+<a href="#" class="float-wa js-wa" data-msg="Hi Creative Vision, I have a question." aria-label="Chat on WhatsApp">
+  <svg width="27" height="27" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2.003c-5.53 0-10.02 4.49-10.02 10.02 0 1.77.46 3.5 1.34 5.02L2 22l5.1-1.34a10 10 0 0 0 4.94 1.31h.01c5.53 0 10.02-4.49 10.02-10.02 0-2.68-1.04-5.2-2.94-7.09a9.96 9.96 0 0 0-7.09-2.9zm5.87 14.34c-.25.7-1.45 1.34-2 1.43-.51.08-1.15.11-1.86-.12-.43-.14-.98-.32-1.68-.63-2.96-1.28-4.89-4.26-5.04-4.46-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.78-.37h.56c.18 0 .42-.07.66.5.25.6.85 2.06.92 2.21.07.15.12.33.02.53-.1.2-.15.32-.3.5-.15.18-.31.4-.44.53-.15.15-.3.31-.13.6.17.3.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.36 1.45.3.15.47.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.66-.15.27.1 1.7.8 1.99.95.3.15.5.22.57.35.07.13.07.75-.18 1.46z"></path></svg>
+</a>
+
+<script>
+  const WHATSAPP_NUMBER = "918812011049";
+  const DEFAULT_MSG = "Hi Creative Vision, I'd like to know more about your solutions.";
+
+  document.querySelectorAll('.js-wa').forEach(el => {
+    const msg = el.getAttribute('data-msg') || DEFAULT_MSG;
+    el.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    el.target = "_blank";
+    el.rel = "noopener";
+  });
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }));
+
+  // Footer year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.12});
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('in'));
+  }
+</script>
+
+</body>
+</html>

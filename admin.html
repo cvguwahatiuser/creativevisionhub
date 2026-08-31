@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Creative Vision</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="images/tally-official-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#060B14; --navy-900:#0A1628; --navy-800:#132A47;
+    --slate-400:#8CA0B8; --slate-500:#6B8099; --slate-600:#4E617A;
+    --white:#FFFFFF; --off-white:#F5F8FB; --paper:#EFF3F8;
+    --green-600:#0C8C5B; --green-500:#12A66E; --green-400:#26C384; --green-050:#E7FAF1;
+    --red-500:#E4483D;
+    --font-display:'Space Grotesk', sans-serif; --font-body:'Inter', sans-serif; --font-mono:'JetBrains Mono', monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  body{margin:0; font-family:var(--font-body); background:var(--off-white); color:var(--navy-900);}
+  h1,h2,h3{font-family:var(--font-display); margin:0;}
+  .container{max-width:1080px; margin:0 auto; padding:0 24px;}
+  a{color:inherit;}
+
+  /* Gate screen */
+  .gate{min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--navy-950); padding:20px;}
+  .gate-box{background:var(--white); border-radius:16px; padding:36px 32px; max-width:360px; width:100%; text-align:center;}
+  .gate-box h1{font-size:20px; margin-bottom:6px;}
+  .gate-box p{font-size:13.5px; color:var(--slate-500); margin-bottom:20px;}
+  .gate-box input{width:100%; padding:12px 14px; border:1px solid var(--paper); border-radius:8px; font-size:14px; margin-bottom:12px;}
+  .gate-box button{width:100%; padding:12px; border:none; border-radius:8px; background:var(--green-500); color:var(--navy-950); font-weight:700; cursor:pointer; font-size:14px;}
+  .gate-error{color:var(--red-500); font-size:12.5px; margin-top:8px; display:none;}
+  .gate-note{margin-top:16px; font-size:11.5px; color:var(--slate-400); line-height:1.5;}
+
+  /* Admin shell */
+  #adminShell{display:none;}
+  .topbar{background:var(--navy-950); color:var(--white); padding:18px 0;}
+  .topbar-inner{display:flex; align-items:center; justify-content:space-between; max-width:1080px; margin:0 auto; padding:0 24px;}
+  .topbar h1{font-size:18px;}
+  .topbar h1 span{color:var(--green-400);}
+  .logout-btn{background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:8px 14px; border-radius:8px; cursor:pointer; font-size:13px;}
+
+  .tabs{display:flex; gap:4px; border-bottom:1px solid var(--paper); margin:24px 0; }
+  .tab{padding:12px 18px; cursor:pointer; font-size:14px; font-weight:600; color:var(--slate-500); border-bottom:2px solid transparent;}
+  .tab.active{color:var(--green-600); border-color:var(--green-500);}
+
+  .panel{display:none; padding-bottom:60px;}
+  .panel.active{display:block;}
+
+  .card{background:var(--white); border:1px solid var(--paper); border-radius:14px; padding:24px;}
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:12.5px; font-weight:600; margin-bottom:6px; color:var(--navy-800);}
+  .field input, .field textarea, .field select{width:100%; padding:11px 13px; border:1px solid var(--paper); border-radius:8px; font-size:14px; background:var(--off-white); font-family:var(--font-body);}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:600px){ .field-row{grid-template-columns:1fr;} }
+  .submit-btn{background:var(--green-500); color:var(--navy-950); border:none; padding:12px 24px; border-radius:8px; font-weight:700; cursor:pointer; font-size:14px;}
+  .submit-btn:disabled{background:var(--slate-400); cursor:not-allowed;}
+  .form-msg{margin-top:12px; font-size:13px; padding:10px 14px; border-radius:8px; display:none;}
+  .form-msg.success{background:var(--green-050); color:var(--green-600); display:block;}
+  .form-msg.error{background:#FDECEB; color:var(--red-500); display:block;}
+
+  .toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:12px; flex-wrap:wrap;}
+  .refresh-btn{background:var(--white); border:1px solid var(--paper); padding:9px 16px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:600;}
+
+  table{width:100%; border-collapse:collapse; background:var(--white); border-radius:12px; overflow:hidden; font-size:13px;}
+  th{background:var(--navy-950); color:#fff; text-align:left; padding:12px 14px; font-family:var(--font-mono); font-size:11px; letter-spacing:0.04em; text-transform:uppercase; font-weight:500;}
+  td{padding:12px 14px; border-bottom:1px solid var(--paper); vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  .status-select{padding:6px 10px; border-radius:6px; border:1px solid var(--paper); font-size:12.5px; font-family:var(--font-body);}
+  .items-cell{max-width:260px; font-size:12px; color:var(--slate-600); line-height:1.6;}
+  .empty-row td{text-align:center; color:var(--slate-500); padding:40px;}
+  .config-warning{background:#FFF6E5; border:1px solid #F0D28A; color:#7A5B00; padding:14px 18px; border-radius:10px; font-size:13.5px; margin-bottom:20px;}
+  .config-warning code{background:rgba(0,0,0,0.06); padding:1px 6px; border-radius:4px;}
+  .prod-thumb{width:42px; height:42px; border-radius:6px; object-fit:cover; background:var(--off-white); display:block;}
+  .prod-thumb-empty{width:42px; height:42px; border-radius:6px; background:var(--off-white); border:1px dashed var(--paper);}
+  .delete-btn{background:#FDECEB; color:var(--red-500); border:none; padding:7px 13px; border-radius:6px; font-size:12.5px; font-weight:600; cursor:pointer;}
+  .delete-btn:hover{background:var(--red-500); color:#fff;}
+  .delete-btn:disabled{opacity:0.5; cursor:not-allowed;}
+  .stock-badge{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:100px;}
+  .stock-badge.in{background:var(--green-050); color:var(--green-600);}
+  .stock-badge.out{background:#FDECEB; color:var(--red-500);}
+  .stock-toggle{border:none; padding:7px 12px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; margin-left:8px;}
+  .stock-toggle.to-out{background:var(--off-white); color:var(--slate-600); border:1px solid var(--paper);}
+  .stock-toggle.to-out:hover{background:#FDECEB; color:var(--red-500);}
+  .stock-toggle.to-in{background:var(--off-white); color:var(--slate-600); border:1px solid var(--paper);}
+  .stock-toggle.to-in:hover{background:var(--green-050); color:var(--green-600);}
+  .row-actions{display:flex; align-items:center; flex-wrap:wrap;}
+  .edit-btn{background:var(--off-white); color:var(--slate-700); border:1px solid var(--paper); padding:7px 13px; border-radius:6px; font-size:12.5px; font-weight:600; cursor:pointer;}
+  .edit-btn:hover{border-color:var(--green-400); color:var(--green-600);}
+  .type-badge{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; padding:4px 10px; border-radius:100px;}
+  .type-badge.order{background:var(--green-050); color:var(--green-600);}
+  .type-badge.quotation{background:#EFF0FF; color:#5B4FDB;}
+  .type-badge.enquiry{background:#FFF3E0; color:#B15D00;}
+  .modal-overlay{position:fixed; inset:0; background:rgba(6,11,20,0.55); z-index:400; display:none; align-items:center; justify-content:center; padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--white); border-radius:16px; max-width:520px; width:100%; max-height:88vh; overflow-y:auto; padding:28px;}
+  .link-toggle{background:none; border:none; color:var(--green-600); font-size:12.5px; font-weight:600; cursor:pointer; padding:6px 0; display:inline-block;}
+  .link-toggle:hover{text-decoration:underline;}
+  #pImageFile{width:100%; padding:9px 10px; border:1px solid var(--paper); border-radius:8px; font-size:13px; background:var(--off-white); font-family:var(--font-body);}
+  #imagePreviewWrap{margin-top:10px; display:flex; align-items:center; gap:12px;}
+  .image-preview{width:64px; height:64px; object-fit:cover; border-radius:8px; border:1px solid var(--paper);}
+  .upload-note{font-size:11.5px; color:var(--slate-500); margin-top:6px;}
+</style>
+</head>
+<body>
+
+<!-- ============ PASSWORD GATE ============ -->
+<div class="gate" id="gate">
+  <div class="gate-box">
+    <h1>Creative Vision Admin</h1>
+    <p>Enter your admin key to continue.</p>
+    <input type="password" id="gateInput" placeholder="Admin key">
+    <button id="gateBtn">Enter</button>
+    <div class="gate-error" id="gateError">Incorrect key. Try again.</div>
+    <div class="gate-note">This is a basic access lock, not full account security — don't reuse a sensitive password here, and keep this page's link private.</div>
+  </div>
+</div>
+
+<!-- ============ ADMIN SHELL ============ -->
+<div id="adminShell">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <h1>Creative <span>Vision</span> — Admin</h1>
+      <button class="logout-btn" id="logoutBtn">Log out</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="configWarning" class="config-warning" style="display:none;">
+      <strong>Not connected yet.</strong> Paste your Google Apps Script Web App URL into the <code>API_URL</code> constant near the top of the script in this file (see SETUP-GUIDE.md) to make this panel live.
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="orders">Orders</div>
+      <div class="tab" data-tab="products">Products</div>
+      <div class="tab" data-tab="add-product">Add Product</div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="panel active" id="panel-orders">
+      <div class="toolbar">
+        <div style="font-size:13px; color:var(--slate-500);" id="ordersSummary">Loading orders…</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span style="font-size:12px; color:var(--slate-400);" id="autoRefreshNote">Auto-refreshing every 30s</span>
+          <button class="refresh-btn" id="refreshOrders">Refresh</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr><th>Type</th><th>Order ID</th><th>Date</th><th>Customer</th><th>Phone</th><th>Items</th><th>Description</th><th>Total</th><th>Status</th></tr>
+          </thead>
+          <tbody id="ordersBody">
+            <tr class="empty-row"><td colspan="9">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="panel" id="panel-products">
+      <div class="toolbar">
+        <div style="font-size:13px; color:var(--slate-500);" id="productsSummary">Loading products…</div>
+        <button class="refresh-btn" id="refreshProducts">Refresh</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th></th></tr>
+          </thead>
+          <tbody id="productsBody">
+            <tr class="empty-row"><td colspan="6">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADD PRODUCT -->
+    <div class="panel" id="panel-add-product">
+      <div class="card" style="max-width:520px;">
+        <h3 style="font-size:17px; margin-bottom:18px;">Add a new product</h3>
+        <div class="field"><label>Product Name *</label><input type="text" id="pName" placeholder="e.g. Thermal Receipt Printer"></div>
+        <div class="field-row">
+          <div class="field">
+            <label>Category *</label>
+            <select id="pCategory">
+              <option value="">Select a category…</option>
+              <option value="__new__">+ Add new category</option>
+            </select>
+          </div>
+          <div class="field"><label>Price (₹) *</label><input type="number" id="pPrice" placeholder="e.g. 4999"></div>
+        </div>
+        <div class="field" id="pCategoryNewWrap" style="display:none;">
+          <label>New Category Name</label>
+          <input type="text" id="pCategoryNew" placeholder="e.g. Accessories">
+        </div>
+        <div class="field" id="pImageUrlWrap" style="display:none;">
+          <label>Image URL</label>
+          <input type="text" id="pImage" placeholder="https://... (paste a direct image link)">
+        </div>
+        <div class="field">
+          <label>Product Image</label>
+          <input type="file" id="pImageFile" accept="image/*">
+          <div class="upload-note">Photos are resized automatically. Uploaded images are stored in your Google Drive.</div>
+          <button type="button" class="link-toggle" id="toggleImageMode">Or paste an image URL instead</button>
+          <div id="imagePreviewWrap" style="display:none;">
+            <img id="imagePreview" class="image-preview" alt="Preview">
+            <button type="button" class="link-toggle" id="removeImageBtn">Remove</button>
+          </div>
+        </div>
+        <div class="field"><label>Description</label><textarea id="pDesc" rows="3" placeholder="Short product description"></textarea></div>
+        <button class="submit-btn" id="addProductBtn">Add Product</button>
+        <div class="form-msg" id="productMsg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ EDIT PRODUCT MODAL ============ -->
+<div class="modal-overlay" id="editOverlay">
+  <div class="modal-box">
+    <h3 style="font-size:17px; margin-bottom:18px;">Edit product</h3>
+    <div class="field"><label>Product Name *</label><input type="text" id="ePName"></div>
+    <div class="field-row">
+      <div class="field">
+        <label>Category *</label>
+        <select id="eCategory">
+          <option value="__new__">+ Add new category</option>
+        </select>
+      </div>
+      <div class="field"><label>Price (₹) *</label><input type="number" id="ePPrice"></div>
+    </div>
+    <div class="field" id="eCategoryNewWrap" style="display:none;">
+      <label>New Category Name</label>
+      <input type="text" id="eCategoryNew" placeholder="e.g. Accessories">
+    </div>
+    <div class="field">
+      <label>Current Image</label>
+      <div id="eCurrentImageWrap" style="margin-bottom:10px;">
+        <img id="eCurrentImage" class="image-preview" alt="Current product image">
+      </div>
+    </div>
+    <div class="field" id="eImageUrlWrap" style="display:none;">
+      <label>Image URL</label>
+      <input type="text" id="ePImage" placeholder="https://... (paste a direct image link)">
+    </div>
+    <div class="field">
+      <label>Replace Image (optional)</label>
+      <input type="file" id="ePImageFile" accept="image/*">
+      <div class="upload-note">Leave blank to keep the current image.</div>
+      <button type="button" class="link-toggle" id="eToggleImageMode">Or paste an image URL instead</button>
+      <div id="eImagePreviewWrap" style="display:none;">
+        <img id="eImagePreview" class="image-preview" alt="New image preview">
+        <button type="button" class="link-toggle" id="eRemoveImageBtn">Remove</button>
+      </div>
+    </div>
+    <div class="field"><label>Description</label><textarea id="ePDesc" rows="3"></textarea></div>
+    <button class="submit-btn" id="saveEditBtn">Save Changes</button>
+    <button class="submit-btn" id="cancelEditBtn" style="background:var(--off-white); color:var(--slate-700); margin-left:8px;">Cancel</button>
+    <div class="form-msg" id="editMsg"></div>
+  </div>
+</div>
+
+<script>
+  // =====================================================================
+  // CONFIG — must match the values in shop.html and your Apps Script code
+  // =====================================================================
+  const API_URL = "https://script.google.com/macros/s/AKfycbxpCIuFOHmy0ih5-xGQfXh3DUc7N4so-T_zjrpQ4LFruCR1T0_87EClEvM3FJ0DZfebAg/exec"; // e.g. "https://script.google.com/macros/s/AKfycb.../exec"
+  const ADMIN_KEY = "Admin@01199010"; // must match apps-script.gs
+
+  // ---- Password gate ----
+  const gate = document.getElementById('gate');
+  const shell = document.getElementById('adminShell');
+  const gateInput = document.getElementById('gateInput');
+  const gateError = document.getElementById('gateError');
+
+  function tryEnter(){
+    if(gateInput.value === ADMIN_KEY){
+      sessionStorage.setItem('cv_admin_ok', '1');
+      gate.style.display = 'none';
+      shell.style.display = 'block';
+      init();
+    } else {
+      gateError.style.display = 'block';
+    }
+  }
+  document.getElementById('gateBtn').addEventListener('click', tryEnter);
+  gateInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') tryEnter(); });
+  document.getElementById('logoutBtn').addEventListener('click', ()=>{
+    sessionStorage.removeItem('cv_admin_ok');
+    location.reload();
+  });
+
+  if(sessionStorage.getItem('cv_admin_ok') === '1'){
+    gate.style.display = 'none';
+    shell.style.display = 'block';
+    init();
+  }
+
+  // ---- Tabs ----
+  document.querySelectorAll('.tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(`panel-${tab.dataset.tab}`).classList.add('active');
+    });
+  });
+
+  function init(){
+    if(!API_URL){
+      document.getElementById('configWarning').style.display = 'block';
+      document.getElementById('ordersBody').innerHTML = '<tr class="empty-row"><td colspan="9">Connect your Google Sheet to see real orders here.</td></tr>';
+      document.getElementById('ordersSummary').textContent = 'Not connected';
+      document.getElementById('productsBody').innerHTML = '<tr class="empty-row"><td colspan="6">Connect your Google Sheet to see real products here.</td></tr>';
+      document.getElementById('productsSummary').textContent = 'Not connected';
+      document.getElementById('autoRefreshNote').style.display = 'none';
+      return;
+    }
+    loadOrders();
+    loadProducts();
+    startAutoRefresh();
+  }
+
+  // ---- Auto-refresh orders every 30s while this tab is open and visible ----
+  let autoRefreshTimer = null;
+  function startAutoRefresh(){
+    if(autoRefreshTimer) clearInterval(autoRefreshTimer);
+    autoRefreshTimer = setInterval(()=>{
+      if(document.visibilityState === 'visible'){
+        loadOrders();
+      }
+    }, 30000);
+  }
+
+  async function loadOrders(){
+    document.getElementById('ordersSummary').textContent = 'Loading orders…';
+    try{
+      const res = await fetch(`${API_URL}?action=orders&key=${encodeURIComponent(ADMIN_KEY)}`);
+      const data = await res.json();
+      if(data.error){ throw new Error(data.error); }
+      renderOrders(data);
+    }catch(err){
+      document.getElementById('ordersBody').innerHTML = `<tr class="empty-row"><td colspan="9">Couldn't load orders. Check API_URL and ADMIN_KEY.</td></tr>`;
+      document.getElementById('ordersSummary').textContent = 'Error loading orders';
+    }
+  }
+
+  function renderOrders(orders){
+    const now = new Date().toLocaleTimeString('en-IN');
+    document.getElementById('ordersSummary').textContent = `${orders.length} order${orders.length===1?'':'s'} · Updated ${now}`;
+    const body = document.getElementById('ordersBody');
+    if(!orders.length){
+      body.innerHTML = '<tr class="empty-row"><td colspan="9">No orders yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = orders.map(o=>{
+      let items = [];
+      try{ items = JSON.parse(o.Items); }catch(e){}
+      const itemsHtml = items.map(i => `${i.name} × ${i.qty}`).join('<br>') || '—';
+      const date = o.Timestamp ? new Date(o.Timestamp).toLocaleString('en-IN') : '';
+      let type = 'Order', typeClass = 'order';
+      if(o.Type === 'Quotation'){ type = 'Quotation'; typeClass = 'quotation'; }
+      else if(o.Type === 'Enquiry'){ type = 'Enquiry'; typeClass = 'enquiry'; }
+      return `<tr>
+        <td><span class="type-badge ${typeClass}">${type}</span></td>
+        <td><strong>${o.OrderID || ''}</strong></td>
+        <td>${date}</td>
+        <td>${o.CustomerName || ''}</td>
+        <td>${o.Phone || ''}</td>
+        <td class="items-cell">${itemsHtml}</td>
+        <td class="items-cell">${o.Notes || '—'}</td>
+        <td>₹${Number(o.Total || 0).toLocaleString('en-IN')}</td>
+        <td>
+          <select class="status-select" data-id="${o.OrderID}">
+            ${['New','Confirmed','Shipped','Completed','Cancelled'].map(s=>`<option value="${s}" ${o.Status===s?'selected':''}>${s}</option>`).join('')}
+          </select>
+        </td>
+      </tr>`;
+    }).join('');
+
+    document.querySelectorAll('.status-select').forEach(sel=>{
+      sel.addEventListener('change', ()=> updateStatus(sel.dataset.id, sel.value));
+    });
+  }
+
+  async function updateStatus(orderId, status){
+    try{
+      await fetch(API_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({action:'updateOrderStatus', key: ADMIN_KEY, orderId, status})
+      });
+    }catch(err){ alert('Could not update status. Please try again.'); }
+  }
+
+  document.getElementById('refreshOrders').addEventListener('click', loadOrders);
+
+  // ---- Products list (view + delete) ----
+  let ALL_PRODUCTS = [];
+
+  async function loadProducts(){
+    document.getElementById('productsSummary').textContent = 'Loading products…';
+    try{
+      const res = await fetch(`${API_URL}?action=products`);
+      const data = await res.json();
+      ALL_PRODUCTS = Array.isArray(data) ? data : [];
+      renderProducts(ALL_PRODUCTS);
+      populateCategoryDropdown(ALL_PRODUCTS);
+    }catch(err){
+      document.getElementById('productsBody').innerHTML = `<tr class="empty-row"><td colspan="6">Couldn't load products. Check API_URL.</td></tr>`;
+      document.getElementById('productsSummary').textContent = 'Error loading products';
+    }
+  }
+
+  function renderProducts(products){
+    document.getElementById('productsSummary').textContent = `${products.length} product${products.length===1?'':'s'}`;
+    const body = document.getElementById('productsBody');
+    if(!products.length){
+      body.innerHTML = '<tr class="empty-row"><td colspan="6">No products yet — add one from the Add Product tab.</td></tr>';
+      return;
+    }
+    body.innerHTML = products.map(p => {
+      const inStock = p.InStock !== 'No';
+      return `
+      <tr>
+        <td>${p.ImageURL ? `<img class="prod-thumb" src="${p.ImageURL}" alt="${p.Name}" onerror="this.outerHTML='<div class=&quot;prod-thumb-empty&quot;></div>'">` : `<div class="prod-thumb-empty"></div>`}</td>
+        <td><strong>${p.Name || ''}</strong></td>
+        <td>${p.Category || ''}</td>
+        <td>₹${Number(p.Price || 0).toLocaleString('en-IN')}</td>
+        <td><span class="stock-badge ${inStock?'in':'out'}">${inStock?'In Stock':'Out of Stock'}</span></td>
+        <td>
+          <div class="row-actions">
+            <button class="edit-btn" data-id="${p.ID}">Edit</button>
+            <button class="stock-toggle ${inStock?'to-out':'to-in'}" data-id="${p.ID}" data-instock="${inStock}">${inStock?'Mark Out of Stock':'Mark In Stock'}</button>
+            <button class="delete-btn" data-id="${p.ID}" data-name="${p.Name}">Delete</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+
+    document.querySelectorAll('.delete-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=> deleteProduct(btn.dataset.id, btn.dataset.name, btn));
+    });
+    document.querySelectorAll('.stock-toggle').forEach(btn=>{
+      btn.addEventListener('click', ()=> toggleStock(btn.dataset.id, btn.dataset.instock === 'true', btn));
+    });
+    document.querySelectorAll('.edit-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=> openEditModal(btn.dataset.id));
+    });
+  }
+
+  async function toggleStock(id, currentlyInStock, btn){
+    const newStock = currentlyInStock ? 'No' : 'Yes';
+    btn.disabled = true; btn.textContent = 'Updating…';
+    try{
+      const res = await fetch(API_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({action:'updateStock', key: ADMIN_KEY, id, inStock: newStock})
+      });
+      const data = await res.json();
+      if(data.error) throw new Error(data.error);
+      loadProducts();
+    }catch(err){
+      alert('Could not update stock status. Please try again.');
+      btn.disabled = false;
+      btn.textContent = currentlyInStock ? 'Mark Out of Stock' : 'Mark In Stock';
+    }
+  }
+
+  async function deleteProduct(id, name, btn){
+    if(!confirm(`Delete "${name}"? This can't be undone.`)) return;
+    btn.disabled = true; btn.textContent = 'Deleting…';
+    try{
+      const res = await fetch(API_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({action:'deleteProduct', key: ADMIN_KEY, id})
+      });
+      const data = await res.json();
+      if(data.error) throw new Error(data.error);
+      loadProducts();
+    }catch(err){
+      alert('Could not delete product. Please try again.');
+      btn.disabled = false; btn.textContent = 'Delete';
+    }
+  }
+
+  document.getElementById('refreshProducts').addEventListener('click', loadProducts);
+
+  // ---- Category dropdown (Add Product tab) ----
+  function populateCategoryDropdown(products){
+    const select = document.getElementById('pCategory');
+    const categories = [...new Set(products.map(p => p.Category).filter(Boolean))].sort();
+    const currentValue = select.value;
+    select.innerHTML = `<option value="">Select a category…</option>` +
+      categories.map(c => `<option value="${c}">${c}</option>`).join('') +
+      `<option value="__new__">+ Add new category</option>`;
+    if(categories.includes(currentValue)) select.value = currentValue;
+  }
+
+  document.getElementById('pCategory').addEventListener('change', (e)=>{
+    const newWrap = document.getElementById('pCategoryNewWrap');
+    newWrap.style.display = e.target.value === '__new__' ? 'block' : 'none';
+  });
+
+  // ---- Add product ----
+  let uploadedImageData = null;
+  let uploadedImageName = null;
+
+  document.getElementById('pImageFile').addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev)=>{
+      const img = new Image();
+      img.onload = ()=>{
+        const maxDim = 900;
+        let w = img.width, h = img.height;
+        if(w > maxDim || h > maxDim){
+          if(w > h){ h = Math.round(h * maxDim / w); w = maxDim; }
+          else{ w = Math.round(w * maxDim / h); h = maxDim; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        uploadedImageData = canvas.toDataURL('image/jpeg', 0.82);
+        uploadedImageName = 'product-' + Date.now() + '.jpg';
+        document.getElementById('imagePreview').src = uploadedImageData;
+        document.getElementById('imagePreviewWrap').style.display = 'flex';
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('removeImageBtn').addEventListener('click', ()=>{
+    uploadedImageData = null; uploadedImageName = null;
+    document.getElementById('pImageFile').value = '';
+    document.getElementById('imagePreviewWrap').style.display = 'none';
+  });
+
+  document.getElementById('toggleImageMode').addEventListener('click', (e)=>{
+    const urlWrap = document.getElementById('pImageUrlWrap');
+    const showingUrl = urlWrap.style.display !== 'none';
+    urlWrap.style.display = showingUrl ? 'none' : 'block';
+    e.target.textContent = showingUrl ? 'Or paste an image URL instead' : 'Or upload a file instead';
+  });
+
+  document.getElementById('addProductBtn').addEventListener('click', async ()=>{
+    const name = document.getElementById('pName').value.trim();
+    const categorySelect = document.getElementById('pCategory').value;
+    const categoryNew = document.getElementById('pCategoryNew').value.trim();
+    const category = categorySelect === '__new__' ? categoryNew : categorySelect;
+    const price = document.getElementById('pPrice').value.trim();
+    const imageUrl = document.getElementById('pImage').value.trim();
+    const description = document.getElementById('pDesc').value.trim();
+    const msg = document.getElementById('productMsg');
+    msg.className = 'form-msg';
+
+    if(!name || !category || !price){
+      msg.textContent = 'Please fill in name, category and price.';
+      msg.classList.add('error');
+      return;
+    }
+    if(!API_URL){
+      msg.textContent = 'Not connected — paste your Apps Script URL into API_URL first.';
+      msg.classList.add('error');
+      return;
+    }
+
+    const btn = document.getElementById('addProductBtn');
+    btn.disabled = true; btn.textContent = uploadedImageData ? 'Uploading image…' : 'Adding…';
+
+    const payload = {action:'addProduct', key: ADMIN_KEY, name, category, price, description};
+    if(uploadedImageData){
+      payload.imageData = uploadedImageData;
+      payload.imageName = uploadedImageName;
+    } else {
+      payload.imageUrl = imageUrl;
+    }
+
+    try{
+      const res = await fetch(API_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if(data.error) throw new Error(data.error);
+      msg.textContent = data.imageWarning
+        ? `Product added, but image upload had an issue: ${data.imageWarning}`
+        : 'Product added! It will appear on the shop page.';
+      msg.classList.add(data.imageWarning ? 'error' : 'success');
+      document.getElementById('pName').value = '';
+      document.getElementById('pCategory').value = '';
+      document.getElementById('pCategoryNew').value = '';
+      document.getElementById('pCategoryNewWrap').style.display = 'none';
+      document.getElementById('pPrice').value = '';
+      document.getElementById('pImage').value = '';
+      document.getElementById('pDesc').value = '';
+      document.getElementById('pImageFile').value = '';
+      document.getElementById('imagePreviewWrap').style.display = 'none';
+      uploadedImageData = null; uploadedImageName = null;
+      loadProducts(); // refresh product list + category dropdown with the new entry
+    }catch(err){
+      msg.textContent = 'Something went wrong. Check your connection and try again.';
+      msg.classList.add('error');
+    }
+    btn.disabled = false; btn.textContent = 'Add Product';
+  });
+
+  // ---- Edit product ----
+  let editingProductId = null;
+  let editUploadedImageData = null;
+  let editUploadedImageName = null;
+
+  function openEditModal(id){
+    const product = ALL_PRODUCTS.find(p => p.ID === id);
+    if(!product) return;
+    editingProductId = id;
+    editUploadedImageData = null;
+    editUploadedImageName = null;
+
+    document.getElementById('ePName').value = product.Name || '';
+    document.getElementById('ePPrice').value = product.Price || '';
+    document.getElementById('ePDesc').value = product.Description || '';
+    document.getElementById('ePImage').value = '';
+
+    const categories = [...new Set(ALL_PRODUCTS.map(p => p.Category).filter(Boolean))].sort();
+    const catSelect = document.getElementById('eCategory');
+    catSelect.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('') +
+      `<option value="__new__">+ Add new category</option>`;
+    catSelect.value = categories.includes(product.Category) ? product.Category : '__new__';
+    document.getElementById('eCategoryNewWrap').style.display = catSelect.value === '__new__' ? 'block' : 'none';
+    document.getElementById('eCategoryNew').value = catSelect.value === '__new__' ? (product.Category || '') : '';
+
+    const curImg = document.getElementById('eCurrentImage');
+    if(product.ImageURL){
+      curImg.src = product.ImageURL;
+      document.getElementById('eCurrentImageWrap').style.display = 'block';
+    } else {
+      document.getElementById('eCurrentImageWrap').style.display = 'none';
+    }
+
+    document.getElementById('eImageUrlWrap').style.display = 'none';
+    document.getElementById('eImagePreviewWrap').style.display = 'none';
+    document.getElementById('ePImageFile').value = '';
+    document.getElementById('eToggleImageMode').textContent = 'Or paste an image URL instead';
+    document.getElementById('editMsg').className = 'form-msg';
+    document.getElementById('editMsg').textContent = '';
+
+    document.getElementById('editOverlay').classList.add('open');
+  }
+
+  function closeEditModal(){
+    document.getElementById('editOverlay').classList.remove('open');
+    editingProductId = null;
+  }
+  document.getElementById('cancelEditBtn').addEventListener('click', closeEditModal);
+  document.getElementById('editOverlay').addEventListener('click', (e)=>{
+    if(e.target.id === 'editOverlay') closeEditModal();
+  });
+
+  document.getElementById('eCategory').addEventListener('change', (e)=>{
+    document.getElementById('eCategoryNewWrap').style.display = e.target.value === '__new__' ? 'block' : 'none';
+  });
+
+  document.getElementById('eToggleImageMode').addEventListener('click', (e)=>{
+    const urlWrap = document.getElementById('eImageUrlWrap');
+    const showingUrl = urlWrap.style.display !== 'none';
+    urlWrap.style.display = showingUrl ? 'none' : 'block';
+    e.target.textContent = showingUrl ? 'Or paste an image URL instead' : 'Or upload a file instead';
+  });
+
+  document.getElementById('ePImageFile').addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev)=>{
+      const img = new Image();
+      img.onload = ()=>{
+        const maxDim = 900;
+        let w = img.width, h = img.height;
+        if(w > maxDim || h > maxDim){
+          if(w > h){ h = Math.round(h * maxDim / w); w = maxDim; }
+          else{ w = Math.round(w * maxDim / h); h = maxDim; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        editUploadedImageData = canvas.toDataURL('image/jpeg', 0.82);
+        editUploadedImageName = 'product-' + Date.now() + '.jpg';
+        document.getElementById('eImagePreview').src = editUploadedImageData;
+        document.getElementById('eImagePreviewWrap').style.display = 'flex';
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('eRemoveImageBtn').addEventListener('click', ()=>{
+    editUploadedImageData = null; editUploadedImageName = null;
+    document.getElementById('ePImageFile').value = '';
+    document.getElementById('eImagePreviewWrap').style.display = 'none';
+  });
+
+  document.getElementById('saveEditBtn').addEventListener('click', async ()=>{
+    if(!editingProductId) return;
+    const name = document.getElementById('ePName').value.trim();
+    const categorySelect = document.getElementById('eCategory').value;
+    const categoryNew = document.getElementById('eCategoryNew').value.trim();
+    const category = categorySelect === '__new__' ? categoryNew : categorySelect;
+    const price = document.getElementById('ePPrice').value.trim();
+    const imageUrl = document.getElementById('ePImage').value.trim();
+    const description = document.getElementById('ePDesc').value.trim();
+    const msg = document.getElementById('editMsg');
+    msg.className = 'form-msg';
+
+    if(!name || !category || !price){
+      msg.textContent = 'Please fill in name, category and price.';
+      msg.classList.add('error');
+      return;
+    }
+
+    const btn = document.getElementById('saveEditBtn');
+    btn.disabled = true; btn.textContent = editUploadedImageData ? 'Uploading image…' : 'Saving…';
+
+    const payload = {action:'updateProduct', key: ADMIN_KEY, id: editingProductId, name, category, price, description};
+    if(editUploadedImageData){
+      payload.imageData = editUploadedImageData;
+      payload.imageName = editUploadedImageName;
+    } else if(imageUrl){
+      payload.imageUrl = imageUrl;
+    }
+
+    try{
+      const res = await fetch(API_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if(data.error) throw new Error(data.error);
+      if(data.imageWarning){
+        msg.textContent = `Saved, but image upload had an issue: ${data.imageWarning}`;
+        msg.classList.add('error');
+      } else {
+        loadProducts();
+        closeEditModal();
+        return;
+      }
+    }catch(err){
+      msg.textContent = 'Something went wrong. Check your connection and try again.';
+      msg.classList.add('error');
+    }
+    btn.disabled = false; btn.textContent = 'Save Changes';
+  });
+</script>
+
+</body>
+</html>
