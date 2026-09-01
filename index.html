@@ -113,11 +113,19 @@
   .btn-whatsapp:hover{background:var(--green-400); box-shadow:0 10px 24px -8px rgba(18,166,110,0.55);}
 
   /* ---------- Nav ---------- */
+  /* backdrop-filter/background live on ::before, not .nav itself — putting a
+     filter directly on .nav would make it the "containing block" for any
+     position:fixed descendant (like the mobile menu panel), trapping that
+     panel inside the header's own small box instead of the full screen. */
   .nav{
     position:sticky; top:0; z-index:100;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .nav::before{
+    content:"";
+    position:absolute; inset:0; z-index:-1;
     background:rgba(6,11,20,0.86);
     backdrop-filter:blur(10px);
-    border-bottom:1px solid rgba(255,255,255,0.08);
   }
   .nav-inner{
     display:flex; align-items:center; justify-content:space-between;

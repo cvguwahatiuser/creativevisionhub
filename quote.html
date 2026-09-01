@@ -41,14 +41,33 @@
   .btn-block{width:100%;}
 
   /* Nav */
-  .nav{position:sticky; top:0; z-index:100; background:rgba(6,11,20,0.92); backdrop-filter:blur(10px); border-bottom:1px solid rgba(255,255,255,0.08);}
+  /* backdrop-filter/background live on ::before, not .nav itself — a filter
+     directly on .nav would trap any position:fixed descendant (the mobile
+     menu) inside the header's own small box instead of the full screen. */
+  .nav{position:sticky; top:0; z-index:100; border-bottom:1px solid rgba(255,255,255,0.08);}
+  .nav::before{content:""; position:absolute; inset:0; z-index:-1; background:rgba(6,11,20,0.92); backdrop-filter:blur(10px);}
   .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:16px 24px; max-width:var(--container); margin:0 auto;}
   .brand{font-family:var(--font-display); font-weight:700; font-size:20px; color:var(--white);}
   .brand span{color:var(--green-400);}
   .nav-links{display:flex; align-items:center; gap:30px;}
   .nav-links a{color:var(--slate-400); font-size:14.5px; font-weight:500;}
   .nav-links a:hover, .nav-links a.active{color:var(--white);}
-  @media (max-width:760px){ .nav-links{display:none;} }
+  .nav-toggle{display:none; background:none; border:1px solid rgba(255,255,255,0.2); border-radius:8px; width:42px; height:42px; align-items:center; justify-content:center; color:var(--white); cursor:pointer;}
+  @media (max-width:760px){
+    .nav-links{
+      position:fixed; top:64px; right:0; bottom:0; left:0; z-index:99;
+      background:var(--navy-950);
+      flex-direction:column; align-items:flex-start; gap:2px;
+      padding:20px 24px 32px;
+      transform:translateY(-8px);
+      opacity:0; pointer-events:none;
+      transition:opacity .2s ease, transform .2s ease;
+      overflow-y:auto;
+    }
+    .nav-links.is-open{opacity:1; pointer-events:auto; transform:translateY(0);}
+    .nav-links a{width:100%; padding:14px 4px; border-bottom:1px solid rgba(255,255,255,0.08); font-size:16px;}
+    .nav-toggle{display:inline-flex;}
+  }
 
   /* Header */
   .page-header{background:var(--navy-950); color:var(--white); padding:56px 0 40px;}
@@ -107,7 +126,7 @@
 <header class="nav">
   <div class="nav-inner">
     <a href="index.html" class="brand">CREATIVE <span>VISION</span></a>
-    <nav class="nav-links">
+    <nav class="nav-links" id="navLinks">
       <a href="index.html">Home</a>
       <a href="index.html#solutions">Solutions</a>
       <a href="shop.html">Buy Now</a>
@@ -115,6 +134,9 @@
       <a href="enquire.html">Enquire</a>
       <a href="index.html#contact">Contact</a>
     </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
   </div>
 </header>
 
@@ -340,6 +362,18 @@
     document.getElementById('waLink').href = waUrl;
     window.open(waUrl, '_blank');
   });
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }));
 
   loadProducts();
   renderSelected();

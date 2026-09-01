@@ -44,7 +44,11 @@
   .btn-sm{padding:8px 14px; font-size:13px;}
 
   /* Nav */
-  .nav{position:sticky; top:0; z-index:100; background:rgba(6,11,20,0.92); backdrop-filter:blur(10px); border-bottom:1px solid rgba(255,255,255,0.08);}
+  /* backdrop-filter/background live on ::before, not .nav itself — a filter
+     directly on .nav would trap any position:fixed descendant (the mobile
+     menu) inside the header's own small box instead of the full screen. */
+  .nav{position:sticky; top:0; z-index:100; border-bottom:1px solid rgba(255,255,255,0.08);}
+  .nav::before{content:""; position:absolute; inset:0; z-index:-1; background:rgba(6,11,20,0.92); backdrop-filter:blur(10px);}
   .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:16px 24px; max-width:var(--container); margin:0 auto;}
   .brand{font-family:var(--font-display); font-weight:700; font-size:20px; color:var(--white);}
   .brand span{color:var(--green-400);}
@@ -52,10 +56,25 @@
   .nav-links a{color:var(--slate-400); font-size:14.5px; font-weight:500;}
   .nav-links a:hover, .nav-links a.active{color:var(--white);}
   .nav-right{display:flex; align-items:center; gap:14px;}
+  .nav-toggle{display:none; background:none; border:1px solid rgba(255,255,255,0.2); border-radius:8px; width:42px; height:42px; align-items:center; justify-content:center; color:var(--white); cursor:pointer;}
   .cart-btn{position:relative; display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:var(--white); padding:10px 16px; border-radius:8px; cursor:pointer; font-weight:600; font-size:14px;}
   .cart-btn:hover{border-color:var(--green-400);}
   .cart-count{background:var(--green-500); color:var(--navy-950); font-size:11px; font-weight:700; border-radius:100px; padding:1px 7px; min-width:18px; text-align:center;}
-  @media (max-width:760px){ .nav-links{display:none;} }
+  @media (max-width:760px){
+    .nav-links{
+      position:fixed; top:64px; right:0; bottom:0; left:0; z-index:99;
+      background:var(--navy-950);
+      flex-direction:column; align-items:flex-start; gap:2px;
+      padding:20px 24px 32px;
+      transform:translateY(-8px);
+      opacity:0; pointer-events:none;
+      transition:opacity .2s ease, transform .2s ease;
+      overflow-y:auto;
+    }
+    .nav-links.is-open{opacity:1; pointer-events:auto; transform:translateY(0);}
+    .nav-links a{width:100%; padding:14px 4px; border-bottom:1px solid rgba(255,255,255,0.08); font-size:16px;}
+    .nav-toggle{display:inline-flex;}
+  }
 
   /* Header */
   .shop-header{background:var(--navy-950); color:var(--white); padding:56px 0 40px;}
@@ -168,7 +187,7 @@
 <header class="nav">
   <div class="nav-inner">
     <a href="index.html" class="brand">CREATIVE <span>VISION</span></a>
-    <nav class="nav-links">
+    <nav class="nav-links" id="navLinks">
       <a href="index.html">Home</a>
       <a href="index.html#solutions">Solutions</a>
       <a href="shop.html" class="active">Buy Now</a>
@@ -180,6 +199,9 @@
       <button class="cart-btn" id="cartToggle" aria-label="Open cart">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
         Cart <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
       </button>
     </div>
   </div>
@@ -461,6 +483,18 @@
   document.getElementById('floatCart').addEventListener('click', openDrawer);
   document.getElementById('drawerClose').addEventListener('click', closeDrawer);
   overlay.addEventListener('click', closeDrawer);
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }));
 
   // Checkout modal
   const checkoutOverlay = document.getElementById('checkoutOverlay');
