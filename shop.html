@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shop — Creative Vision</title>
 <meta name="description" content="Browse POS hardware, thermal printers, barcode scanners, consumables and more from Creative Vision — Tally Certified Partner, Guwahati.">
+<link rel="canonical" href="https://creativevisionhub.in/shop.html">
+<meta name="theme-color" content="#0A1628">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Creative Vision">
+<meta property="og:title" content="Shop — Creative Vision">
+<meta property="og:description" content="Browse POS hardware, thermal printers, barcode scanners, consumables and more from Creative Vision — Tally Certified Partner, Guwahati.">
+<meta property="og:url" content="https://creativevisionhub.in/shop.html">
+<meta property="og:image" content="https://creativevisionhub.in/images/office-2.jpg">
+<meta property="og:locale" content="en_IN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Shop — Creative Vision">
+<meta name="twitter:description" content="Browse POS hardware, thermal printers, barcode scanners, consumables and more from Creative Vision — Tally Certified Partner, Guwahati.">
+<meta name="twitter:image" content="https://creativevisionhub.in/images/office-2.jpg">
 <link rel="icon" type="image/png" href="images/tally-official-logo.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -285,16 +299,7 @@
   const API_URL = "https://script.google.com/macros/s/AKfycbxpCIuFOHmy0ih5-xGQfXh3DUc7N4so-T_zjrpQ4LFruCR1T0_87EClEvM3FJ0DZfebAg/exec"; // e.g. "https://script.google.com/macros/s/AKfycb.../exec"
   const WHATSAPP_NUMBER = "918812011049";
 
-  const DEMO_PRODUCTS = [
-    {ID:'DEMO1', Name:'Thermal Receipt Printer', Category:'Hardware', Price:6499, ImageURL:'', Description:'80mm auto-cutter thermal printer for billing counters.'},
-    {ID:'DEMO2', Name:'Barcode Scanner (Wired)', Category:'Hardware', Price:2199, ImageURL:'', Description:'USB laser barcode scanner, plug and scan.'},
-    {ID:'DEMO3', Name:'Thermal Paper Roll (Pack of 10)', Category:'Consumables', Price:750, ImageURL:'', Description:'79mm x 50m thermal billing rolls.'},
-    {ID:'DEMO4', Name:'Barcode Label Roll', Category:'Consumables', Price:320, ImageURL:'', Description:'40mm x 25mm self-adhesive barcode labels.'},
-    {ID:'DEMO5', Name:'Cash Drawer', Category:'Hardware', Price:4200, ImageURL:'', Description:'5-note, 8-coin compartment cash drawer with RJ11.'},
-    {ID:'DEMO6', Name:'TallyPrime Silver (Single User)', Category:'Software', Price:22500, ImageURL:'', Description:'Annual license, single user, with implementation support.'},
-    {ID:'DEMO7', Name:'POS Billing Terminal', Category:'Hardware', Price:28900, ImageURL:'', Description:'All-in-one touchscreen billing terminal with built-in printer bay.'},
-    {ID:'DEMO8', Name:'Courier Shipping Bags (Pack of 100)', Category:'Consumables', Price:640, ImageURL:'', Description:'Tamper-proof polybags, mixed sizes.'},
-  ];
+  const DEMO_PRODUCTS = [];
 
   let PRODUCTS = [];
   let CART = JSON.parse(localStorage.getItem('cv_cart') || '[]');
@@ -324,8 +329,7 @@
 
   async function loadProducts(){
     if(!API_URL){
-      PRODUCTS = DEMO_PRODUCTS;
-      document.getElementById('demoBanner').style.display = 'block';
+      PRODUCTS = [];
       renderFilters(); renderProducts();
       return;
     }
@@ -351,22 +355,22 @@
         PRODUCTS = data;
         localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify({products: data, ts: Date.now()}));
       } else if(!hadCache){
-        PRODUCTS = DEMO_PRODUCTS;
-        document.getElementById('demoBanner').style.display = 'block';
+        PRODUCTS = [];
       }
     }catch(err){
-      if(!hadCache){
-        PRODUCTS = DEMO_PRODUCTS;
-        document.getElementById('demoBanner').style.display = 'block';
-      }
+      if(!hadCache) PRODUCTS = [];
     }
     renderFilters(); renderProducts();
+  }
+
+  function esc(value){
+    return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"\"":'&quot;',"'":'&#39;'}[ch]));
   }
 
   function renderFilters(){
     const cats = ['All', ...new Set(PRODUCTS.map(p => p.Category).filter(Boolean))];
     document.getElementById('filters').innerHTML = cats.map(c =>
-      `<button class="filter-chip ${c===activeFilter?'active':''}" data-cat="${c}">${c}</button>`
+      `<button class="filter-chip ${c===activeFilter?'active':''}" data-cat="${c}">${esc(c)}</button>`
     ).join('');
     document.querySelectorAll('.filter-chip').forEach(btn=>{
       btn.addEventListener('click', ()=>{ activeFilter = btn.dataset.cat; renderFilters(); renderProducts(); });
@@ -387,21 +391,21 @@
       return `
       <div class="product-card ${inStock?'':'out-of-stock'}">
         <div class="product-img">
-          ${p.ImageURL ? `<img src="${p.ImageURL}" alt="${p.Name}" loading="lazy">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--slate-400);">${placeholderSvg}</div>`}
-          ${p.Category ? `<span class="product-cat">${p.Category}</span>` : ''}
+          ${p.ImageURL ? `<img src="${esc(p.ImageURL)}" alt="${esc(p.Name)}" loading="lazy">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--slate-400);">${placeholderSvg}</div>`}
+          ${p.Category ? `<span class="product-cat">${esc(p.Category)}</span>` : ''}
           ${inStock ? '' : `<span class="out-of-stock-badge">Out of Stock</span>`}
         </div>
         <div class="product-body">
-          <div class="product-name">${p.Name}</div>
-          ${p.Description ? `<div class="product-desc">${p.Description}</div>` : ''}
+          <div class="product-name">${esc(p.Name)}</div>
+          ${p.Description ? `<div class="product-desc">${esc(p.Description)}</div>` : ''}
           <div class="product-price">${money(p.Price)}</div>
           <div class="product-actions">
             <div class="qty-stepper ${inStock?'':'disabled'}">
-              <button class="qty-minus" data-id="${p.ID}" ${inStock?'':'disabled'}>−</button>
-              <span id="qty-${p.ID}">${qty}</span>
-              <button class="qty-plus" data-id="${p.ID}" ${inStock?'':'disabled'}>+</button>
+              <button class="qty-minus" data-id="${esc(p.ID)}" ${inStock?'':'disabled'}>−</button>
+              <span id="qty-${esc(p.ID)}">${qty}</span>
+              <button class="qty-plus" data-id="${esc(p.ID)}" ${inStock?'':'disabled'}>+</button>
             </div>
-            <button class="add-btn ${qty>0?'added':''}" data-id="${p.ID}" id="add-${p.ID}" ${inStock?'':'disabled'}>${inStock ? (qty>0?'In Cart':'Add') : 'Out of Stock'}</button>
+            <button class="add-btn ${qty>0?'added':''}" data-id="${esc(p.ID)}" id="add-${esc(p.ID)}" ${inStock?'':'disabled'}>${inStock ? (qty>0?'In Cart':'Add') : 'Out of Stock'}</button>
           </div>
         </div>
       </div>`;
@@ -451,9 +455,9 @@
     }
     wrap.innerHTML = CART.map(c => `
       <div class="cart-item">
-        <img src="${c.image || ''}" onerror="this.style.display='none'" alt="${c.name}">
+        <img src="${esc(c.image || '')}" onerror="this.style.display='none'" alt="${esc(c.name)}">
         <div class="cart-item-info">
-          <div class="cart-item-name">${c.name}</div>
+          <div class="cart-item-name">${esc(c.name)}</div>
           <div class="cart-item-price">${money(c.price)} × ${c.qty} = ${money(c.price*c.qty)}</div>
           <div class="cart-item-row">
             <div class="qty-stepper">
@@ -525,7 +529,7 @@
       <div class="field"><label>Delivery Address</label><textarea id="custAddress" rows="2" placeholder="Address (or leave blank for store pickup)"></textarea></div>
       <div class="field"><label>Notes (optional)</label><textarea id="custNotes" rows="2" placeholder="Any special instructions"></textarea></div>
       <div class="order-summary">
-        ${CART.map(c => `<div class="order-summary-row"><span>${c.name} × ${c.qty}</span><span>${money(c.price*c.qty)}</span></div>`).join('')}
+        ${CART.map(c => `<div class="order-summary-row"><span>${esc(c.name)} × ${c.qty}</span><span>${money(c.price*c.qty)}</span></div>`).join('')}
         <div class="order-summary-total"><span>Total</span><span>${money(subtotal)}</span></div>
       </div>
       <button class="btn btn-primary btn-block" id="placeOrderBtn">Place Order</button>
@@ -570,7 +574,7 @@
 
     // Build WhatsApp message
     let msg = `New order from ${name} (${phone})\nOrder ID: ${orderId}\n\n`;
-    CART.forEach(c => { msg += `• ${c.name} × ${c.qty} — ${money(c.price*c.qty)}\n`; });
+    CART.forEach(c => { msg += `• ${esc(c.name)} × ${c.qty} — ${money(c.price*c.qty)}\n`; });
     msg += `\nTotal: ${money(subtotal)}`;
     if(address) msg += `\nAddress: ${address}`;
     if(notes) msg += `\nNotes: ${notes}`;

@@ -267,37 +267,57 @@
   // CONFIG — must match the values in shop.html and your Apps Script code
   // =====================================================================
   const API_URL = "https://script.google.com/macros/s/AKfycbxpCIuFOHmy0ih5-xGQfXh3DUc7N4so-T_zjrpQ4LFruCR1T0_87EClEvM3FJ0DZfebAg/exec"; // e.g. "https://script.google.com/macros/s/AKfycb.../exec"
-  const ADMIN_KEY = "Admin@01199010"; // must match apps-script.gs
+  const ADMIN_SESSION_KEY = 'cv_admin_token';
+  let adminToken = sessionStorage.getItem(ADMIN_SESSION_KEY) || '';
 
-  // ---- Password gate ----
+  // ---- Secure password gate ----
   const gate = document.getElementById('gate');
   const shell = document.getElementById('adminShell');
   const gateInput = document.getElementById('gateInput');
   const gateError = document.getElementById('gateError');
 
-  function tryEnter(){
-    if(gateInput.value === ADMIN_KEY){
-      sessionStorage.setItem('cv_admin_ok', '1');
+  async function tryEnter(){
+    gateError.style.display = 'none';
+    if(!API_URL){ gateError.textContent = 'Admin API is not configured.'; gateError.style.display='block'; return; }
+    const password = gateInput.value;
+    if(!password){ gateError.textContent = 'Enter your admin password.'; gateError.style.display='block'; return; }
+    try{
+      const res = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({action:'adminAuth', password}) });
+      const data = await res.json();
+      if(!data.success) throw new Error(data.error || 'Invalid password');
+      adminToken = data.token;
+      sessionStorage.setItem(ADMIN_SESSION_KEY, adminToken);
+      gateInput.value = '';
       gate.style.display = 'none';
       shell.style.display = 'block';
       init();
-    } else {
+    }catch(err){
+      gateError.textContent = err.message || 'Login failed.';
       gateError.style.display = 'block';
     }
   }
+  function forceLogout(){
+    const token = adminToken;
+    adminToken = '';
+    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    if(token && API_URL) fetch(`${API_URL}?action=adminLogout&token=${encodeURIComponent(token)}`).catch(()=>{});
+    location.reload();
+  }
   document.getElementById('gateBtn').addEventListener('click', tryEnter);
   gateInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') tryEnter(); });
-  document.getElementById('logoutBtn').addEventListener('click', ()=>{
-    sessionStorage.removeItem('cv_admin_ok');
-    location.reload();
-  });
+  document.getElementById('logoutBtn').addEventListener('click', forceLogout);
 
-  if(sessionStorage.getItem('cv_admin_ok') === '1'){
-    gate.style.display = 'none';
-    shell.style.display = 'block';
-    init();
+  async function ensureAdminResponse(data){
+    if(data && data.error === 'Unauthorized'){ forceLogout(); throw new Error('Your admin session expired. Please log in again.'); }
+    return data;
   }
 
+  if(adminToken){ gate.style.display = 'none'; shell.style.display = 'block'; init(); }
+
+
+  function esc(value){
+    return String(value == null ? '' : value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;',"\"":'&quot;'}[ch]));
+  }
   // ---- Tabs ----
   document.querySelectorAll('.tab').forEach(tab=>{
     tab.addEventListener('click', ()=>{
@@ -337,12 +357,12 @@
   async function loadOrders(){
     document.getElementById('ordersSummary').textContent = 'Loading orders…';
     try{
-      const res = await fetch(`${API_URL}?action=orders&key=${encodeURIComponent(ADMIN_KEY)}`);
+      const res = await fetch(`${API_URL}?action=orders&token=${encodeURIComponent(adminToken)}`);
       const data = await res.json();
       if(data.error){ throw new Error(data.error); }
       renderOrders(data);
     }catch(err){
-      document.getElementById('ordersBody').innerHTML = `<tr class="empty-row"><td colspan="9">Couldn't load orders. Check API_URL and ADMIN_KEY.</td></tr>`;
+      document.getElementById('ordersBody').innerHTML = `<tr class="empty-row"><td colspan="9">Couldn't load orders. Your session may have expired; please log in again.</td></tr>`;
       document.getElementById('ordersSummary').textContent = 'Error loading orders';
     }
   }
@@ -373,7 +393,7 @@
         <td class="items-cell">${o.Notes || '—'}</td>
         <td>₹${Number(o.Total || 0).toLocaleString('en-IN')}</td>
         <td>
-          <select class="status-select" data-id="${o.OrderID}">
+          <select class="status-select" data-id="${esc(o.OrderID)}">
             ${['New','Confirmed','Shipped','Completed','Cancelled'].map(s=>`<option value="${s}" ${o.Status===s?'selected':''}>${s}</option>`).join('')}
           </select>
         </td>
@@ -390,7 +410,7 @@
       await fetch(API_URL, {
         method:'POST',
         headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body: JSON.stringify({action:'updateOrderStatus', key: ADMIN_KEY, orderId, status})
+        body: JSON.stringify({action:'updateOrderStatus', token: adminToken, orderId, status})
       });
     }catch(err){ alert('Could not update status. Please try again.'); }
   }
@@ -425,16 +445,16 @@
       const inStock = p.InStock !== 'No';
       return `
       <tr>
-        <td>${p.ImageURL ? `<img class="prod-thumb" src="${p.ImageURL}" alt="${p.Name}" onerror="this.outerHTML='<div class=&quot;prod-thumb-empty&quot;></div>'">` : `<div class="prod-thumb-empty"></div>`}</td>
+        <td>${p.ImageURL ? `<img class="prod-thumb" src="${esc(p.ImageURL)}" alt="${esc(p.Name)}" onerror="this.outerHTML='<div class=&quot;prod-thumb-empty&quot;></div>'">` : `<div class="prod-thumb-empty"></div>`}</td>
         <td><strong>${p.Name || ''}</strong></td>
         <td>${p.Category || ''}</td>
         <td>₹${Number(p.Price || 0).toLocaleString('en-IN')}</td>
         <td><span class="stock-badge ${inStock?'in':'out'}">${inStock?'In Stock':'Out of Stock'}</span></td>
         <td>
           <div class="row-actions">
-            <button class="edit-btn" data-id="${p.ID}">Edit</button>
-            <button class="stock-toggle ${inStock?'to-out':'to-in'}" data-id="${p.ID}" data-instock="${inStock}">${inStock?'Mark Out of Stock':'Mark In Stock'}</button>
-            <button class="delete-btn" data-id="${p.ID}" data-name="${p.Name}">Delete</button>
+            <button class="edit-btn" data-id="${esc(p.ID)}">Edit</button>
+            <button class="stock-toggle ${inStock?'to-out':'to-in'}" data-id="${esc(p.ID)}" data-instock="${inStock}">${inStock?'Mark Out of Stock':'Mark In Stock'}</button>
+            <button class="delete-btn" data-id="${esc(p.ID)}" data-name="${esc(p.Name)}">Delete</button>
           </div>
         </td>
       </tr>`;
@@ -458,7 +478,7 @@
       const res = await fetch(API_URL, {
         method:'POST',
         headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body: JSON.stringify({action:'updateStock', key: ADMIN_KEY, id, inStock: newStock})
+        body: JSON.stringify({action:'updateStock', token: adminToken, id, inStock: newStock})
       });
       const data = await res.json();
       if(data.error) throw new Error(data.error);
@@ -477,7 +497,7 @@
       const res = await fetch(API_URL, {
         method:'POST',
         headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body: JSON.stringify({action:'deleteProduct', key: ADMIN_KEY, id})
+        body: JSON.stringify({action:'deleteProduct', token: adminToken, id})
       });
       const data = await res.json();
       if(data.error) throw new Error(data.error);
@@ -574,7 +594,7 @@
     const btn = document.getElementById('addProductBtn');
     btn.disabled = true; btn.textContent = uploadedImageData ? 'Uploading image…' : 'Adding…';
 
-    const payload = {action:'addProduct', key: ADMIN_KEY, name, category, price, description};
+    const payload = {action:'addProduct', token: adminToken, name, category, price, description};
     if(uploadedImageData){
       payload.imageData = uploadedImageData;
       payload.imageName = uploadedImageName;
@@ -728,7 +748,7 @@
     const btn = document.getElementById('saveEditBtn');
     btn.disabled = true; btn.textContent = editUploadedImageData ? 'Uploading image…' : 'Saving…';
 
-    const payload = {action:'updateProduct', key: ADMIN_KEY, id: editingProductId, name, category, price, description};
+    const payload = {action:'updateProduct', token: adminToken, id: editingProductId, name, category, price, description};
     if(editUploadedImageData){
       payload.imageData = editUploadedImageData;
       payload.imageName = editUploadedImageName;

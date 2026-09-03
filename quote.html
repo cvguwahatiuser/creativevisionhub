@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Get a Quotation — Creative Vision</title>
 <meta name="description" content="Request a quotation from Creative Vision — Tally Certified Partner, Guwahati. Tell us what you need and select items for pricing.">
+<link rel="canonical" href="https://creativevisionhub.in/quote.html">
+<meta name="theme-color" content="#0A1628">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Creative Vision">
+<meta property="og:title" content="Get a Quotation — Creative Vision">
+<meta property="og:description" content="Request a quotation from Creative Vision — Tally Certified Partner, Guwahati. Tell us what you need and select items for pricing.">
+<meta property="og:url" content="https://creativevisionhub.in/quote.html">
+<meta property="og:image" content="https://creativevisionhub.in/images/office-2.jpg">
+<meta property="og:locale" content="en_IN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Get a Quotation — Creative Vision">
+<meta name="twitter:description" content="Request a quotation from Creative Vision — Tally Certified Partner, Guwahati. Tell us what you need and select items for pricing.">
+<meta name="twitter:image" content="https://creativevisionhub.in/images/office-2.jpg">
 <link rel="icon" type="image/png" href="images/tally-official-logo.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -217,6 +231,10 @@
 
   function money(n){ return '₹' + Number(n).toLocaleString('en-IN'); }
 
+  function esc(value){
+    return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"\"":'&quot;',"'":'&#39;'}[ch]));
+  }
+
   async function loadProducts(){
     if(!API_URL){
       document.getElementById('pickList').innerHTML = '<div class="empty-note">Product list isn\'t connected yet.</div>';
@@ -255,16 +273,16 @@
       const qty = sel ? sel.qty : 0;
       return `
       <div class="pick-item ${qty>0?'selected':''}">
-        ${p.ImageURL ? `<img class="pick-thumb" src="${p.ImageURL}" alt="${p.Name}">` : `<div class="pick-thumb-empty"></div>`}
+        ${p.ImageURL ? `<img class="pick-thumb" src="${esc(p.ImageURL)}" alt="${esc(p.Name)}">` : `<div class="pick-thumb-empty"></div>`}
         <div class="pick-info">
-          <div class="pick-name">${p.Name}</div>
+          <div class="pick-name">${esc(p.Name)}</div>
           <div class="pick-cat">${p.Category || ''}</div>
           <div class="pick-price">${money(p.Price)}</div>
         </div>
         <div class="pick-qty">
-          <button type="button" data-id="${p.ID}" data-delta="-1">−</button>
-          <span id="pickqty-${p.ID}">${qty}</span>
-          <button type="button" data-id="${p.ID}" data-delta="1">+</button>
+          <button type="button" data-id="${esc(p.ID)}" data-delta="-1">−</button>
+          <span id="pickqty-${esc(p.ID)}">${qty}</span>
+          <button type="button" data-id="${esc(p.ID)}" data-delta="1">+</button>
         </div>
       </div>`;
     }).join('');
